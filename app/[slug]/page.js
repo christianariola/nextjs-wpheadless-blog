@@ -1,6 +1,6 @@
 import React from 'react';
 
-const page = () => {
+const Page = () => {
   return (
     <>
       <section className="py-12 bg-white sm:py-16 lg:py-20">
@@ -279,4 +279,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

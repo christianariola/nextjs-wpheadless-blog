@@ -3,23 +3,41 @@ import React, { useState, useEffect } from 'react';
 import Postgrid from '@/components/Postgrid';
 import { getPosts } from '@/actions/wp.actions';
 
-const page = () => {
+const Page = () => {
 
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
+  console.log("Page: " + page);
   console.log(posts);
 
   const allPosts = async () => {
     setLoading(true);
-    const res = await getPosts();
-    setPosts(res);
+    const res = await getPosts(page);
+
+    setPosts(res.posts);
+    setTotalPages(res.totalPages)
     setLoading(false);
   }
 
   useEffect(() => {
     allPosts();
-  }, [])
+  }, [page])
+
+  const handleNextPage = () => {
+    if (page < totalPages) {
+      setPage(page + 1);
+    }
+    console.log(page + " " + totalPages)
+  };
+
+  const handlePreviousPage = () => {
+    if(page > 1){
+      setPage(page - 1)
+    }
+  }
 
   return (
     <>
@@ -38,15 +56,15 @@ const page = () => {
           <div className="grid max-w-md grid-cols-1 mx-auto mt-12 sm:mt-16 md:grid-cols-3 gap-y-12 md:gap-x-8 lg:gap-x-16 md:max-w-none">
             { loading ? (<p>Loading...</p>) : posts.length ? (posts.map((post) => (
               <Postgrid key={post.id} post={post} />
-            ))): <p>No posts found</p>};
+            ))): <p>No posts found</p>}
             
           </div>
         </div>
 
         <div className='flex justify-between mt-8'>
-            <button>Previous</button>
-            <span>Page of 2</span>
-            <button>Next</button>
+            <button onClick={handlePreviousPage} disabled={page === 1}>{' '}Previous</button>
+            <span> {page} of {totalPages}</span>
+            <button onClick={handleNextPage} disabled={page === totalPages}>{' '}Next</button>
         </div>
       </section>
 
@@ -152,4 +170,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;
