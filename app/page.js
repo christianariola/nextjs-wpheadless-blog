@@ -6,12 +6,15 @@ import { getPosts } from '@/actions/wp.actions';
 const page = () => {
 
   const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   console.log(posts);
 
   const allPosts = async () => {
+    setLoading(true);
     const res = await getPosts();
     setPosts(res);
+    setLoading(false);
   }
 
   useEffect(() => {
@@ -33,12 +36,23 @@ const page = () => {
           </div>
 
           <div className="grid max-w-md grid-cols-1 mx-auto mt-12 sm:mt-16 md:grid-cols-3 gap-y-12 md:gap-x-8 lg:gap-x-16 md:max-w-none">
-            <Postgrid />
+            { loading ? (<p>Loading...</p>) : posts.length ? (posts.map((post) => (
+              <Postgrid key={post.id} post={post} />
+            ))): <p>No posts found</p>};
+            
           </div>
+        </div>
+
+        <div className='flex justify-between mt-8'>
+            <button>Previous</button>
+            <span>Page of 2</span>
+            <button>Next</button>
         </div>
       </section>
 
-      <div className="py-12 bg-white sm:py-16">
+      
+
+      {/* <div className="py-12 bg-white sm:py-16">
         <div className="px-4 mx-auto sm:px-6 lg:px-8 max-w-7xl">
           <div className="flex items-center justify-center space-x-2">
             <a
@@ -133,7 +147,7 @@ const page = () => {
             </a>
           </div>
         </div>
-      </div> 
+      </div>  */}
     </>
   );
 };

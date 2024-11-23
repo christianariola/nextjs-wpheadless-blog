@@ -14,6 +14,10 @@ const nextConfig = {
                 protocol: 'https',
                 hostname: 'snehaltayde.com',
             },
+            {
+                protocol: 'http',
+                hostname: 'localhost',
+            },
         ],
     },
 };
