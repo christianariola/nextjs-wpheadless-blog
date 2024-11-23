@@ -1,8 +1,23 @@
-import React from 'react';
+'use client';
+import React, { useState, useEffect } from 'react';
 import Postgrid from '@/components/Postgrid';
-
+import { getPosts } from '@/actions/wp.actions';
 
 const page = () => {
+
+  const [posts, setPosts] = useState([]);
+
+  console.log(posts);
+
+  const allPosts = async () => {
+    const res = await getPosts();
+    setPosts(res);
+  }
+
+  useEffect(() => {
+    allPosts();
+  }, [])
+
   return (
     <>
       <section className="py-12 bg-white sm:py-16 lg:py-20">
