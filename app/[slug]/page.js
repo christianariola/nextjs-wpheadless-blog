@@ -1,6 +1,45 @@
-import React from 'react';
+'use client';
+import React, { useEffect, useState } from 'react';
+import { getPost } from '@/actions/wp.actions';
+import { decodeHTMLEntities, formatDate } from '@/utils/lib';
+import Link from 'next/link';
+import Image from 'next/image';
+import DOMPurify from 'dompurify';
 
-const Page = () => {
+const Page = ({params}) => {
+
+  const [post, setPost] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  console.log(post);
+
+  const fetchPost = async () => {
+    setLoading(true);
+
+    try {
+      const response = await getPost(params.slug)
+      setPost(response[0])
+      setError(response?.data.status)
+    } catch (error) {
+      setError(error)
+    }
+
+    setLoading(false)
+  }
+
+  useEffect(() => {
+    fetchPost();
+  }, []);
+
+  if(error?.status == 404) {
+    return <div>Not Found</div>
+  }
+
+  if(loading) {
+    return <div>Loading</div>
+  }
+
   return (
     <>
       <section className="py-12 bg-white sm:py-16 lg:py-20">
@@ -9,16 +48,16 @@ const Page = () => {
             <nav className="flex items-center justify-center">
               <ol className="flex items-center space-x-2">
                 <li>
-                  <a
-                    href="#"
+                  <Link
+                    href="/"
                     title=""
                     className="text-base font-medium text-gray-900"
                   >
                     Home
-                  </a>
+                  </Link>
                 </li>
 
-                <li>
+                {/* <li>
                   <div className="flex items-center">
                     <svg
                       className="w-5 h-5 text-gray-900 shrink-0"
@@ -37,7 +76,7 @@ const Page = () => {
                       Blog
                     </a>
                   </div>
-                </li>
+                </li> */}
 
                 <li>
                   <div className="flex items-center">
@@ -50,39 +89,44 @@ const Page = () => {
                     >
                       <path d="M5.555 17.776l8-16 .894.448-8 16-.894-.448z" />
                     </svg>
-                    <a
-                      href="#"
+                    <Link
+                      href={`/${post?.slug}`}
                       title=""
                       className="ml-2 text-base font-medium text-gray-500"
                     >
-                      Five Pizza Tips
-                    </a>
+                      {decodeHTMLEntities(post?.title?.rendered)}
+                    </Link>
                   </div>
                 </li>
               </ol>
             </nav>
 
             <h1 className="mt-6 text-4xl font-bold text-gray-900 sm:text-5xl">
-              Five pizza tips you need to learn now
+              {decodeHTMLEntities(post?.title?.rendered)}
             </h1>
 
             <div className="flex items-center justify-center mt-8 space-x-2">
               <p className="text-base font-medium text-gray-900">
-                <a href="#" title="" className="">
-                  Food
-                </a>
+                  {(post?.category_names || []).map((category, index) => (
+                    <span key={category}>
+                      {category}
+                      {index < post?.category_names.length - 1 ? ', ' : ''}
+                    </span>
+                  ))}
               </p>
               <span className="text-base font-medium text-gray-500">•</span>
               <p className="text-base font-medium text-gray-500">
-                November 22, 2021
+                {formatDate(post?.date)}
               </p>
             </div>
           </div>
 
           <div className="mt-8 sm:mt-12 lg:mt-16 aspect-w-16 aspect-h-9 lg:aspect-h-6">
-            <img
+            <Image
+              width="500"
+              height="500"
               className="object-cover w-full h-full"
-              src="https://landingfoliocom.imgix.net/store/collection/clarity-blog/images/blog-content/1/cover.png"
+              src={post?.featured_image_url}
               alt=""
             />
           </div>
@@ -166,77 +210,7 @@ const Page = () => {
 
             <div className="hidden lg:block lg:col-span-2"></div>
 
-            <article className="prose lg:col-span-8 max-w-none prose-gray prose-blockquote:px-8 prose-blockquote:py-3 prose-blockquote:lg:text-xl prose-blockquote:font-medium prose-blockquote:text-gray-900 prose-blockquote:border-gray-900 prose-blockquote:border-l-2 prose-blockquote:lg:leading-9 prose-blockquote:not-italic prose-blockquote:bg-gray-100 prose-blockquote:text-lg prose-blockquote:leading-8">
-              <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Id
-                pellentesque ut pellentesque varius amet mauris. Tempor, risus,
-                congue gravida nulla tincidunt nec diam. Tincidunt magnis eu,
-                vitae dictumst commodo dolor in. Aenean dictumst risus posuere a
-                at id fermentum nibh. Luctus nunc bibendum duis egestas
-                scelerisque.
-              </p>
-              <p>
-                Maecenas in pharetra hendrerit neque, tellus eu. Arcu tempus,
-                vel blandit adipiscing a sed cursus. Augue vestibulum tempus
-                lectus gravida condimentum mauris iaculis. Sodales imperdiet id
-                maecenas molestie id.
-              </p>
-
-              <blockquote>
-                <p>
-                  Tincidunt magnis eu, vitae dictumst commodo dolor in. Aen ean
-                  dictumst risus posuere a at id fermentum nibh. Luctus nunc
-                  bibendum duis egestas scelerisque.
-                </p>
-              </blockquote>
-
-              <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Id
-                pellentesque ut pellentesque varius amet mauris. Tempor, risus,
-                congue gravida nulla tincidunt nec diam. Tincidunt magnis eu,
-                vitae dictumst commodo dolor in. Aenean dictumst risus posuere a
-                at id fermentum nibh. Luctus nunc bibendum duis egestas
-                scelerisque.
-              </p>
-
-              <p>
-                Maecenas in pharetra hendrerit neque, tellus eu. Arcu tempus,
-                vel blandit adipiscing a sed cursus. Augue vestibulum tempus
-                lectus gravida condimentum mauris iaculis. Sodales imperdiet id
-                maecenas molestie id.
-              </p>
-
-              <ul className="marker:text-gray-900">
-                <li>Id pellentesque ut pellentesque varius amet mauris.</li>
-
-                <li>Tempor, risus, congue gravida nulla tincidunt.</li>
-
-                <li>Tincidunt magnis eu, vitae dictumst.</li>
-
-                <li>Aenean dictumst risus posuere a at id fermentum nibh.</li>
-              </ul>
-
-              <img
-                className="object-cover w-full"
-                src="https://landingfoliocom.imgix.net/store/collection/clarity-blog/images/blog-content/1/image.png"
-                alt=""
-              />
-
-              <h2>How to start the process?</h2>
-              <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Id
-                pellentesque ut pellentesque varius amet mauris. Tempor, risus,
-                congue gravida nulla tincidunt nec diam. Tincidunt magnis eu,
-                vitae dictumst commodo dolor in. Aenean dictumst risus posuere a
-                at id fermentum nibh. Luctus nunc bibendum duis egestas
-                scelerisque.
-              </p>
-              <p>
-                Maecenas in pharetra hendrerit neque, tellus eu. Arcu tempus,
-                vel blandit adipiscing a sed cursus. Augue vestibulum tempus
-                lectus gravida condimentum mauris iaculis. Sodales imperdiet id
-                maecenas molestie id.
-              </p>
+            <article dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post?.content?.rendered)}} className="prose lg:col-span-8 max-w-none prose-gray prose-blockquote:px-8 prose-blockquote:py-3 prose-blockquote:lg:text-xl prose-blockquote:font-medium prose-blockquote:text-gray-900 prose-blockquote:border-gray-900 prose-blockquote:border-l-2 prose-blockquote:lg:leading-9 prose-blockquote:not-italic prose-blockquote:bg-gray-100 prose-blockquote:text-lg prose-blockquote:leading-8">
             </article>
           </div>
         </div>
