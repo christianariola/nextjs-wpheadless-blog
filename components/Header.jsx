@@ -1,22 +1,38 @@
-import React from 'react'
+'use client';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
+import { getCategories } from '@/actions/wp.actions';
+import Link from 'next/link';
 
 const Header = () => {
+
+  const [categories, setCategories] = useState([]);
+  const getAllCategories = async() => {
+    const res = await getCategories();
+    setCategories(res);
+  }
+
+  useEffect(() => {
+    getAllCategories();
+  }, []);
+
+  console.log(categories)
+
   return (
     <>
       <header className="py-4 bg-white" x-data="{expanded: false}">
         <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
           <div className="flex items-center justify-between">
             <div className="flex-shrink-0">
-              <a href="#" title="" className="flex">
+              <Link href="/" title="" className="flex">
                 <Image
-                  width="100"
-                  height="100"
+                  width="150"
+                  height="180"
                   className=""
                   src="https://cdn.rareblocks.xyz/collection/clarity/images/logo.svg"
                   alt=""
                 />
-              </a>
+              </Link>
             </div>
 
             <div className="flex lg:hidden">
@@ -58,32 +74,16 @@ const Header = () => {
             </div>
 
             <nav className="hidden lg:flex lg:items-center lg:justify-center lg:space-x-12">
-              <a
-                href="#"
-                title=""
-                className="text-base font-medium text-gray-900 transition-all duration-200 rounded focus:outline-none font-pj hover:text-opacity-50 focus:ring-1 focus:ring-gray-900 focus:ring-offset-2"
-              >
-                {' '}
-                Experts{' '}
-              </a>
-
-              <a
-                href="#"
-                title=""
-                className="text-base font-medium text-gray-900 transition-all duration-200 rounded focus:outline-none font-pj hover:text-opacity-50 focus:ring-1 focus:ring-gray-900 focus:ring-offset-2"
-              >
-                {' '}
-                Community Groups{' '}
-              </a>
-
-              <a
-                href="#"
-                title=""
-                className="text-base font-medium text-gray-900 transition-all duration-200 rounded focus:outline-none font-pj hover:text-opacity-50 focus:ring-1 focus:ring-gray-900 focus:ring-offset-2"
-              >
-                {' '}
-                Support{' '}
-              </a>
+              { categories && (categories.map((category) => (
+                  <Link
+                  key={category.id}
+                  href={`/category/${category.slug}`}
+                  title=""
+                  className="text-base font-medium text-gray-900 transition-all duration-200 rounded focus:outline-none font-pj hover:text-opacity-50 focus:ring-1 focus:ring-gray-900 focus:ring-offset-2"
+                >
+                  {category.name}
+                </Link>
+              )))}
             </nav>
 
             <nav className="hidden lg:flex lg:items-center lg:justify-end lg:space-x-10">
@@ -96,7 +96,7 @@ const Header = () => {
                 Login{' '}
               </a>
 
-              <a
+              {/* <a
                 href="#"
                 title=""
                 className="
@@ -122,7 +122,7 @@ const Header = () => {
                 role="button"
               >
                 Join community
-              </a>
+              </a> */}
             </nav>
           </div>
 

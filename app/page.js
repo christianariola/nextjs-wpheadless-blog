@@ -10,8 +10,8 @@ const Page = () => {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
-  console.log("Page: " + page);
-  console.log(posts);
+  // console.log("Page: " + page);
+  // console.log(posts);
 
   const allPosts = async () => {
     setLoading(true);
