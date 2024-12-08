@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import CommentList from './CommentList';
 import { postComment } from '@/actions/wp.actions';
 
 const Comments = ({post}) => {
@@ -102,6 +103,7 @@ const Comments = ({post}) => {
                 </div>
             </div>
         </div>
+        <CommentList post={post} />
         </>
     )
 }

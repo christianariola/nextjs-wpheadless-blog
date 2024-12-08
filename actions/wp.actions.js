@@ -63,3 +63,11 @@ export async function postComment(data) {
     console.log(comments);
     return comments;
 }
+
+export async function getComments(postId) {
+    const res = await fetch(
+        `http://localhost/chanblog/wp-json/wp/v2/comments?post=${postId}`
+    );
+    const comments = await res.json();
+    return comments;
+}
