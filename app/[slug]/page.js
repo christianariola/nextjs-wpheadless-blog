@@ -5,6 +5,7 @@ import { decodeHTMLEntities, formatDate } from '@/utils/lib';
 import Link from 'next/link';
 import Image from 'next/image';
 import DOMPurify from 'dompurify';
+import Comments from '@/components/Comments';
 
 const Page = ({params}) => {
 
@@ -12,7 +13,7 @@ const Page = ({params}) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  console.log(post);
+  // console.log(post);
 
   const fetchPost = async () => {
     setLoading(true);
@@ -217,7 +218,8 @@ const Page = ({params}) => {
         <div className="py-8 bg-white">
           <div className="px-4 mx-auto sm:px-6 lg:px-8 max-w-9xl">
             <div className="max-w-xl mx-auto">
-              <div>
+              <Comments post={post} />
+              {/* <div>
                 <label
                   htmlFor=""
                   className="block text-sm font-bold text-gray-900"
@@ -244,7 +246,7 @@ const Page = ({params}) => {
                     Add Comment{' '}
                   </button>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>

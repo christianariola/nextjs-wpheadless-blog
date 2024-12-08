@@ -44,3 +44,22 @@ export async function getPostsByCategoryName(categoryName, page, perPage = 2) {
         return [];
     }
 }
+
+export async function postComment(data) {
+    const res = await fetch(`http://localhost/chanblog/wp-json/wp/v2/comments`, {
+        method: 'POST',
+        headers: {
+        'Content-Type': 'application/json',
+        },
+
+        body: JSON.stringify({
+        post: data.post,
+        author_name: data.author_name,
+        author_email: data.author_email,
+        content: data.content,
+        }),
+    });
+    const comments = await res.json();
+    console.log(comments);
+    return comments;
+}

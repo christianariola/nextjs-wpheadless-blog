@@ -9,6 +9,7 @@ const Page = ({params}) => {
     const [loading, setLoading] = useState(false);
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
+    const [categories, setCategories] = useState();
 
     const displayPosts = async () => {
         setLoading(true);
@@ -16,6 +17,7 @@ const Page = ({params}) => {
     
         setPosts(res.posts);
         setTotalPages(res.totalPages)
+        setCategories(params.catslug.charAt(0).toUpperCase() + params.catslug.slice(1))
         setLoading(false);
     }
 
@@ -50,7 +52,7 @@ const Page = ({params}) => {
             <div className="px-4 mx-auto sm:px-6 lg:px-8 max-w-7xl">
                 <div className="max-w-md mx-auto md:mx-0">
                 <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl">
-                    Category: {params.catslug.charAt(0).toUpperCase() + params.catslug.slice(1)}
+                    Category: {categories ? categories : ""}
                 </h2>
                 </div>
 
@@ -62,8 +64,6 @@ const Page = ({params}) => {
                 </div>
             </div>
             </section>
-
-            
 
             <div className="py-12 bg-white sm:py-16">
             <div className="px-4 mx-auto sm:px-6 lg:px-8 max-w-7xl">

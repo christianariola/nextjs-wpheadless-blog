@@ -16,7 +16,7 @@ const Header = () => {
     getAllCategories();
   }, []);
 
-  console.log(categories)
+  // console.log(categories)
 
   return (
     <>
